@@ -309,6 +309,12 @@ plugin_powerlog.depends = plugin_coreplugin
 plugin_powerlog.depends += plugin_rawhid
 SUBDIRS += plugin_powerlog
 
+# Generic I2C compiler plugin
+plugin_i2c_vm.subdir = i2c_vm
+plugin_i2c_vm.depends = plugin_coreplugin
+plugin_i2c_vm.depends += plugin_uavobjects
+SUBDIRS += plugin_i2c_vm
+
 plugin_sysalarmsmessaging.subdir = sysalarmsmessaging
 plugin_sysalarmsmessaging.depends = plugin_coreplugin
 plugin_sysalarmsmessaging.depends += plugin_uavobjects
