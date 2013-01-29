@@ -90,7 +90,6 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
     programComponentsIdx.push_back(I2C_VM_OP_SET_DEV_ADDR);
 
     for (int i=0; i<programLength; i++){
-//        qDebug() << "Instruction to I2C virtual machine compiler: " << formList[i]->getInstructionType();
         if(formList[i]->getInstructionType()=="None"){
             qDebug() << "'None' instruction";
             programComponentsIdx.push_back(I2C_VM_OP_NOP);
@@ -140,11 +139,9 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
                     reg=VM_F3;
 
                 if(outputFormatStr[2*j+1]=="Little endian"){
-//                    qDebug()<< "LE, Reg" << reg << ", " << outputFormatInt[2*j] <<":"<< outputFormatInt[2*j+1]-outputFormatInt[2*j];
                     i2cReadProgram.push_back(I2C_VM_ASM_LOAD_LE(outputFormatInt[2*j], outputFormatInt[2*j+1]-outputFormatInt[2*j], reg)); //Load formatted bytes into first output register
                 }
                 else{
-//                    qDebug()<< "BE, Reg" << reg << ", " << outputFormatInt[2*j] <<":"<< outputFormatInt[2*j+1]-outputFormatInt[2*j];
                     i2cReadProgram.push_back(I2C_VM_ASM_LOAD_BE(outputFormatInt[2*j], outputFormatInt[2*j+1]-outputFormatInt[2*j], reg)); //Load formatted bytes into first output register
                 }
             }
@@ -267,28 +264,3 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
     }
     i2c_vmSensorSettings->setData(i2c_vmSensorSettingsData);
 }
-
-/*
-I2C_VM_ASM_NOP(), //Do nothing
-
-I2C_VM_ASM_SET_CTR(10), //Set counter to 10
-I2C_VM_ASM_SET_DEV_ADDR(0x53), //Set I2C device address (in 7-bit)
-I2C_VM_ASM_STORE(0x2D, 0), //Store register address
-I2C_VM_ASM_STORE(0x08, 1), //Store register value
-I2C_VM_ASM_WRITE_I2C(2), //Write two bytes
-I2C_VM_ASM_DEC_CTR(), //Decrement counter
-I2C_VM_ASM_BNZ(-4), //If the counter is not zero, go back four steps
-
-I2C_VM_ASM_SET_DEV_ADDR(0x53), //Set I2C device address (in 7-bit)
-I2C_VM_ASM_STORE(0x32, 0), //Store register address
-I2C_VM_ASM_WRITE_I2C(1),  //Write one bytes
-I2C_VM_ASM_DELAY(50), //Delay 50ms
-I2C_VM_ASM_READ_I2C(6),   //Read six bytes
-I2C_VM_ASM_LOAD_LE(0, 2, VM_R0), //Load formatted bytes into first output register
-I2C_VM_ASM_LOAD_LE(2, 2, VM_R1), //Load formatted bytes into second output register
-
-I2C_VM_ASM_SET_DEV_ADDR(0x27), //Set I2C device address (in 7-bit)
-
-I2C_VM_ASM_SEND_UAVO(), //Set the UAVObjects
-I2C_VM_ASM_JUMP(-9),    //Jump back 9 steps
-*/

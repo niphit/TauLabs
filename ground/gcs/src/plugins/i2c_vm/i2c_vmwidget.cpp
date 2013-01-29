@@ -46,8 +46,7 @@ I2C_VMWidget::I2C_VMWidget(QWidget *parent) : QLabel(parent)
     m_widget = new Ui_I2C_VMWidget();
     m_widget->setupUi(this);
 
-//    addUAVObject("I2CVM");
-
+    //TODO: subclass the apply and save buttons to compile before saving
 //    addApplySaveButtons(m_widget->ApplyPushButton,m_widget->SavePushButton);
 
     m_widget->hexDecComboBox->addItem("Hexadecimal");

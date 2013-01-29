@@ -396,8 +396,10 @@ QString VMInstructionForm::getInstructionType()
     return ui.InstructionComboBox->currentText();
 }
 
-/*
- * Compute the relative jump. A negative jump implies backwards movement, vice-versa for a positive jump
+/**
+ * @brief VMInstructionForm::getJumpInstruction Compute the relative jump. A negative jump implies backwards movement, vice-versa for a positive jump
+ * @param relativeJump
+ * @param numJumps
  */
 void VMInstructionForm::getJumpInstruction(int *relativeJump, int *numJumps)
 {
@@ -417,6 +419,12 @@ void VMInstructionForm::getReadInstruction(int*numReadBytes)
     return;
 }
 
+
+/**
+ * @brief VMInstructionForm::getOutputInstruction Gets an instruction of type "write" and appends this to the end
+ * @param valIntOut
+ * @param valStrOut
+ */
 void VMInstructionForm::getOutputInstruction(vector<int> *valIntOut, vector<QString> *valStrOut)
 {
     vector<int> valInt;
@@ -428,7 +436,10 @@ void VMInstructionForm::getOutputInstruction(vector<int> *valIntOut, vector<QStr
     }
 }
 
-
+/**
+ * @brief VMInstructionForm::getWriteInstruction Gets an instruction of type "write". Appends to end of vector
+ * @param val
+ */
 void VMInstructionForm::getWriteInstruction(vector<int> *val)
 {
     val->clear();
@@ -443,6 +454,10 @@ void VMInstructionForm::getWriteInstruction(vector<int> *val)
     return;
 }
 
+/**
+ * @brief VMInstructionForm::getDelayInstruction Gets an instruction of type "delay"
+ * @return
+ */
 int VMInstructionForm::getDelayInstruction()
 {
     return delayMsSpinBox->value();
