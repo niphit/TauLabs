@@ -35,6 +35,26 @@
 #include <QStringList>
 #include <vector>
 
+
+class QRegExpValidator;
+
+class HexSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    HexSpinBox(QWidget *parent = 0);
+
+protected:
+    virtual QValidator::State validate(QString &text, int &pos) const;
+    virtual int valueFromText(const QString &text) const;
+    virtual QString textFromValue(int value) const;
+
+private:
+    QRegExpValidator *validator;
+
+};
+
+
 class I2C_VMWidget : public QLabel
 {
     Q_OBJECT
@@ -47,11 +67,16 @@ private:
     Ui_I2C_VMWidget	*m_widget;
     std::vector<VMInstructionForm*> formList;
     int instrctIdx;
+    HexSpinBox *i2cHexAddressSpinBox;
 
 private slots:
     void addAdditionalCompilerLine();
     void applyCompiler();
     void setHexDecRepresentation(QString);
 };
+
+
+
+
 
 #endif /* I2C_VMWIDGET_H */

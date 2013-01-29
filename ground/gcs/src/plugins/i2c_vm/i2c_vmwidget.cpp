@@ -33,6 +33,7 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPushButton>
+#include <QtGui/QHBoxLayout>
 #include <QScrollArea>
 //#include "uavobjectwidgetutils/configtaskwidget.h"
 
@@ -66,15 +67,17 @@ I2C_VMWidget::I2C_VMWidget(QWidget *parent) : QLabel(parent)
     instrctIdx=0; // <--- *must* come beofre addAdditionalCompilerLine()
     addAdditionalCompilerLine();
 
+    //Create hexadecimal spinbox
+    i2cHexAddressSpinBox= new HexSpinBox(this);
+    i2cHexAddressSpinBox->setPrefix("0x");
+    i2cHexAddressSpinBox->setMinimum(0);
+    i2cHexAddressSpinBox->setMaximum(127); //because we're only using 7 bits
 
-//    setAttribute(Qt::WA_LayoutUsesWidgetRect);
+    //Add hexidecimal spinbox to the stacked widget
+    m_widget->i2cAddressStackedWidget->insertWidget(0,i2cHexAddressSpinBox);
 
-    //Add scroll bar when necessary
-//    QScrollArea *scroll = new QScrollArea;
-//    scroll->setWidget(m_widget->frame);
-//    m_widget->gridLayout->addWidget(scroll);
-
-
+    //Set all fields to hexadecimal notation.
+    setHexDecRepresentation("Hexadecimal");
 }
 
 I2C_VMWidget::~I2C_VMWidget()
@@ -107,16 +110,72 @@ void I2C_VMWidget::addAdditionalCompilerLine(){
 void I2C_VMWidget::applyCompiler(){
     qDebug()<<"Compiling...";
     if (m_widget->hexDecComboBox->currentText()=="Decimal")
-        generateVmCode(m_widget->I2CAddressLabel->text().toInt(0,10), formList);
+        generateVmCode(m_widget->i2cAddressLabel->text().toInt(0,10), formList);
     else
-        generateVmCode(m_widget->I2CAddressLabel->text().toInt(0,16), formList);
+        generateVmCode(m_widget->i2cAddressLabel->text().toInt(0,16), formList);
 }
 
 void I2C_VMWidget::setHexDecRepresentation(QString){
+
+    //Change stacked widget to show appropirate spinbox
+    if(m_widget->hexDecComboBox->currentText()=="Hexadecimal"){
+        m_widget->i2cAddressStackedWidget->setCurrentIndex(0);
+
+        //Copy decimal value to hexadecimal spinbox
+        int decimal_val = m_widget->i2cDecimalAddressSpinBox->value();
+        i2cHexAddressSpinBox->setValue(decimal_val);
+    }
+    else{
+        m_widget->i2cAddressStackedWidget->setCurrentIndex(1);
+
+        //Copy hexadecimal value to decimal spinbox
+        int decimal_val = i2cHexAddressSpinBox->value();
+        m_widget->i2cDecimalAddressSpinBox->setValue(decimal_val);
+    }
+
+
     for (unsigned int i=0; i< formList.size(); i++){
         if(m_widget->hexDecComboBox->currentText()=="Hexadecimal")
             formList[i]->setHexRepresentation(true);
         else
             formList[i]->setHexRepresentation(false);
     }
+}
+
+
+/**
+ * @brief HexSpinBox::HexSpinBox Subclasses spinbox to support hexadecimal
+ * @param parent
+ */
+HexSpinBox::HexSpinBox(QWidget *parent) : QSpinBox(parent)
+{
+    //Validator for hex input
+    validator = new QRegExpValidator(QRegExp("[0-9A-Fa-f]+"), this);
+}
+
+QValidator::State HexSpinBox::validate(QString &text, int &pos) const
+{
+    QString tmpText=text;
+    tmpText.remove("0x"); //Remove the "0x" prefix if it appears in the original string.
+    return validator->validate(tmpText, pos);
+}
+
+/**
+ * @brief HexSpinBox::textFromValue
+ * @param value decimal number
+ * @return ascii hexadecimal value
+ */
+QString HexSpinBox::textFromValue(int value) const
+{
+    return QString::number(value, 16).toUpper();
+}
+
+/**
+ * @brief HexSpinBox::valueFromText
+ * @param text ascii hexadecimal value
+ * @return decimal number
+ */
+int HexSpinBox::valueFromText(const QString &text) const
+{
+    return text.toInt(0, 16);
 }
