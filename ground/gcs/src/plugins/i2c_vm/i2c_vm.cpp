@@ -120,7 +120,7 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
 
             i2cReadProgram.push_back(I2C_VM_ASM_READ_I2C(numReadBytes));   //Read bytes
 
-            for (int j=0; j< outputFormatInt.size()/2; j++){
+            for (unsigned int j=0; j< outputFormatInt.size()/2; j++){
                 uint8_t reg;
                 if(outputFormatStr[2*j]=="r0")
                     reg=VM_R0;
@@ -159,7 +159,7 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
 
             qDebug() << "Writing " << val.size() << " bytes.";
 
-            for (int j=0; j< val.size(); j++){
+            for (unsigned int j=0; j< val.size(); j++){
                 qDebug()<< val[j];
                 i2cWriteProgram.push_back(I2C_VM_ASM_STORE(val[j], j)); //Store register address
             }
@@ -200,7 +200,7 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
     vector<uint32_t> program;
     vector<uint8_t> programIdx;
 
-    for (int i=0; i<programComponentsIdx.size(); i++){
+    for (unsigned int i=0; i<programComponentsIdx.size(); i++){
         programIdx.push_back(program.size()); //Save the location of each element
         int relJump, numJumps;
 
@@ -256,7 +256,7 @@ void generateVmCode(int i2c_addr, vector<VMInstructionForm*> formList)
     }
     else{
         //Reset all usused bytes in program to HALT
-        for (int i=program.size(); i<programField->getNumElements(); i++){
+        for (unsigned int i=program.size(); i<programField->getNumElements(); i++){
             program.push_back(I2C_VM_ASM_HALT());
         }
     }

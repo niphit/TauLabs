@@ -97,7 +97,7 @@ void I2C_VMWidget::addAdditionalCompilerLine(){
 
     //Add form to array for future use
     formList.push_back(form);
-    for (int i=0; i< formList.size(); i++){
+    for (unsigned int i=0; i< formList.size(); i++){
         formList[i]->setNumInstructions(formList.size());
     }
 
@@ -113,7 +113,7 @@ void I2C_VMWidget::applyCompiler(){
 }
 
 void I2C_VMWidget::setHexDecRepresentation(QString){
-    for (int i=0; i< formList.size(); i++){
+    for (unsigned int i=0; i< formList.size(); i++){
         if(m_widget->hexDecComboBox->currentText()=="Hexadecimal")
             formList[i]->setHexRepresentation(true);
         else

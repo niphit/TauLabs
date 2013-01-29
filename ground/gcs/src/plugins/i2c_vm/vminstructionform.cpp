@@ -187,7 +187,7 @@ void VMInstructionForm::switchCompilerInst(QString instruction)
     ui.RemoveFieldPushButton->hide();
     ui.addReadOutputPushButton->hide();
     ui.removeReadOutputPushButton->hide();
-    for (int i=0; i< readFormList.size(); i++){
+    for (unsigned int i=0; i< readFormList.size(); i++){
         readFormList[i]->hide();
     }
 
@@ -211,7 +211,7 @@ void VMInstructionForm::switchCompilerInst(QString instruction)
             addAdditionalReadInstructionLine();
         }
         else{
-            for (int i=0; i< readFormList.size(); i++){
+            for (unsigned int i=0; i< readFormList.size(); i++){
                 readFormList[i]->show();
             }
         }
@@ -334,7 +334,7 @@ void VMInstructionForm::switchNumJumpTimes(QString jumpTimes){
  */
 
 void VMInstructionForm::switchNumReadBytes(int){
-    for (int i=0; i< readFormList.size(); i++){
+    for (unsigned int i=0; i< readFormList.size(); i++){
         readFormList[i]->setNumReadBytes(numReadBytesSpinBox->value());
     }
 
@@ -421,7 +421,7 @@ void VMInstructionForm::getOutputInstruction(vector<int> *valIntOut, vector<QStr
 {
     vector<int> valInt;
     vector<QString> valStr;
-    for (int i=0; i< readFormList.size(); i++){
+    for (unsigned int i=0; i< readFormList.size(); i++){
         readFormList[i]->getReadOutputInstructions(&valInt, &valStr);
         valIntOut->insert(valIntOut->end(), valInt.begin(), valInt.end() );
         valStrOut->insert(valStrOut->end(), valStr.begin(), valStr.end() );
